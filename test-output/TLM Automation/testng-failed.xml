@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [TLM Automation]">
+  <test name="Test(failed)">
+    <classes>
+      <class name="tests.TestAcceptApi">
+        <methods>
+          <include name="acceptTenderShipment"/>
+        </methods>
+      </class> <!-- tests.TestAcceptApi -->
+    </classes>
+  </test> <!-- Test(failed) -->
+</suite> <!-- Failed suite [TLM Automation] -->

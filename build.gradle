@@ -1,0 +1,24 @@
+group 'SCEAutomation'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.8'
+    testCompile group: 'org.testng', name: 'testng', version:'6.8.8'
+    compile 'io.rest-assured:json-path:3.0.6'
+    compile 'io.rest-assured:json-schema-validator:3.0.6'
+    compile group: 'com.jayway.restassured', name: 'rest-assured', version: '1.6'
+    compile 'mysql:mysql-connector-java:6.0.+'
+    compile group: 'com.relevantcodes', name: 'extentreports', version: '2.41.2'
+    compile group: 'com.google.inject', name: 'guice',version: '4.2.0'
+}
+
