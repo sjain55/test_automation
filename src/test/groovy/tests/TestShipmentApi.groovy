@@ -1,9 +1,7 @@
 package tests
 
 import org.testng.annotations.Test
-import test_data_models.BaseShipment
-import test_data_models.BaseShipmentOrderMovement
-import test_data_models.BaseShipmentStop
+import jsonTemplate.BaseShipment
 
 class TestShipmentApi {
 

@@ -5,8 +5,8 @@ import api.TenderApi
 import connection_factories.RestAssuredUtils
 import db.DbConnectionFactory
 import org.testng.annotations.Test
-import test_data_models.BaseAccept
-import test_data_models.BaseTender
+import jsonTemplate.BaseAccept
+import jsonTemplate.BaseTender
 
 class TestAcceptApi{
 

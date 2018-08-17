@@ -1,23 +1,24 @@
-package test_data_models
+package jsonTemplate
 
 import groovy.json.*
 
-
-class BaseTender {
-
+class BaseAccept {
 
     def shipmentid
+    def carrierid
 
-    BaseTender()
+    BaseAccept()
     {
         shipmentid = '1234'
+        carrierid = 'CARR1'
     }
 
     def buildjson()
     {
         def json = new JsonBuilder()
         def root = json {
-            ShipmentId this.shipmentid }
+            ShipmentId this.shipmentid
+            CarrierId this.carrierid }
 
         return json.toPrettyString()
     }

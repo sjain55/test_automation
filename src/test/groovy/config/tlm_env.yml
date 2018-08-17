@@ -6,7 +6,7 @@ tlmqe:
       get_endpoint: /api/scshipment/shipment/shipmentId/
 
     tender:
-      url: http://tender.tlmqe2.manhdev.com
+      url: http://tender.tlmqe.manhdev.com
       endpoint: /api/tender/tender
 
     tracking:
