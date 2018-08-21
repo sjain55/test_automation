@@ -3,7 +3,12 @@ tlmqe:
     shipment:
       url: http://scshipment.tlmqe.manhdev.com
       endpoint: /api/scshipment/shipment
-      get_endpoint: /api/scshipment/shipment/shipmentId/
+      create_endpoint: /api/scshipment/shipment/save
+
+    order:
+      url: http://dcorder.tlmqe.manhdev.com
+      endpoint: /api/dcorder/order
+      create_endpoint: /api/dcorder/order/import
 
     tender:
       url: http://tender.tlmqe.manhdev.com
@@ -44,6 +49,10 @@ tlmqe:
     tracking:
       <<: *db_default
       service: tracking
+
+    order:
+      <<: *db_default
+      service: dcorder
 
     accept:
       <<: *db_default

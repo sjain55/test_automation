@@ -20,5 +20,6 @@ dependencies {
     compile 'mysql:mysql-connector-java:6.0.+'
     compile group: 'com.relevantcodes', name: 'extentreports', version: '2.41.2'
     compile group: 'com.google.inject', name: 'guice',version: '4.2.0'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.11'
 }
 
