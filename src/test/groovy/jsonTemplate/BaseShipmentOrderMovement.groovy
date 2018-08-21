@@ -17,15 +17,14 @@ class BaseShipmentOrderMovement {
         this.orgid = orgid
         orderid = ''
         this.shipmentid = shipmentid
-        orderlegid = ''
+        orderlegid = 0
         orderpickupseq = 1
         orderdeliveryseq = 2
     }
 
-    def buildjson() {
-        def json = new JsonBuilder()
-        def root = json {
+    def buildjson(parent) {
 
+        parent."OrderMovement" {
             OrgId this.orgid
             OrderId this.orderid
             ShipmentId this.shipmentid
@@ -34,6 +33,5 @@ class BaseShipmentOrderMovement {
             OrderDeliverySeq this.orderdeliveryseq
 
         }
-        return json.toPrettyString()
     }
 }

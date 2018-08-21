@@ -1,4 +1,4 @@
-package test_data_models
+package jsonTemplate
 
 import groovy.json.JsonBuilder
 

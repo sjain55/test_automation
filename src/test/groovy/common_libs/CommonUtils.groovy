@@ -2,6 +2,9 @@ package common_libs
 
 import org.yaml.snakeyaml.Yaml
 
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+
 
 class CommonUtils {
 
@@ -40,4 +43,34 @@ class CommonUtils {
         }
     }
 
+    def update_order_timestamp(order,minimum_days_from_now)
+    {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        def dateToStart = 0;
+
+        order.setPickupstartdatetime(timeStampformatter(timestamp.plus(dateToStart+minimum_days_from_now)))
+        order.setPickupenddatetime(timeStampformatter(timestamp.plus(dateToStart+1+minimum_days_from_now)))
+        order.setDeliverydtartdatetime(timeStampformatter(timestamp.plus(dateToStart+2+minimum_days_from_now)))
+        order.setDeliveryenddatetime(timeStampformatter(timestamp.plus(dateToStart+3+minimum_days_from_now)))
+
+    }
+
+    def update_shipment_stop_timestamp(stop,index,minimum_days_from_now)
+    {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        def dateToStart = index * 4;
+        stop.setPlannedarrivalstart(timeStampformatter(timestamp.plus(dateToStart+minimum_days_from_now)))
+        stop.setPlannedarrivalend(timeStampformatter(timestamp.plus(dateToStart+1+minimum_days_from_now)))
+        stop.setPlannerdeparturestart(timeStampformatter(timestamp.plus(dateToStart+2+minimum_days_from_now)))
+        stop.setPlanneddepartureend(timeStampformatter(timestamp.plus(dateToStart+3+minimum_days_from_now)))
+
+    }
+
+    def timeStampformatter(Timestamp timestamp)
+    {
+        String  simpleDateFormat  = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss",Locale.US).format(timestamp);
+        return simpleDateFormat
+
+    }
 }
