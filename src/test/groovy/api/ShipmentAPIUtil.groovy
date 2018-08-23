@@ -1,21 +1,17 @@
-package common_libs
+package api
 
+import common_libs.CommonUtils
 import connection_factories.RestAssuredUtils
 import db.DbConnectionFactory
-import org.codehaus.groovy.runtime.DateGroovyMethods
-import org.testng.internal.junit.ArrayAsserts
-import org.yaml.snakeyaml.Yaml
-import test_data_models.BaseShipmentOrderMovement
-import test_data_models.BaseShipmentStop
-import test_data_models.BaseShipmentNote
-import test_data_models.BaseTender
+import jsonTemplate.BaseShipmentOrderMovement
+import jsonTemplate.BaseShipmentStop
+import jsonTemplate.BaseShipmentNote
+import jsonTemplate.BaseTender
 
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.util.Date
 
-
-class ShipmentUtils {
+class ShipmentAPIUtil {
 
     RestAssuredUtils rest
     BaseTender tender
@@ -26,7 +22,7 @@ class ShipmentUtils {
     def shipment_db_config
     DbConnectionFactory db
 
-    ShipmentUtils()
+    ShipmentAPIUtil()
     {
         rest = new RestAssuredUtils()
         tender = new BaseTender()
@@ -40,24 +36,11 @@ class ShipmentUtils {
         stop.setStopfacilityname(stop_facilities[index])
         stop.setStopaction(stop_actions[index])
         stop.setStopseq(index+1)
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
-        def dateToStart = index * 4;
-        stop.setPlannedarrivalstart(timeStampformatter(timestamp.plus(dateToStart+minimum_days_from_now)))
-        stop.setPlannedarrivalend(timeStampformatter(timestamp.plus(dateToStart+1+minimum_days_from_now)))
-        stop.setPlannerdeparturestart(timeStampformatter(timestamp.plus(dateToStart+2+minimum_days_from_now)))
-        stop.setPlanneddepartureend(timeStampformatter(timestamp.plus(dateToStart+3+minimum_days_from_now)))
+        config.update_shipment_stop_timestamp(stop,index,minimum_days_from_now)
         return stop
     }
 
-    def timeStampformatter(Timestamp timestamp)
-    {
-        String  simpleDateFormat  = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss",Locale.US).format(timestamp);
-        return simpleDateFormat
-
-    }
-
-    def update_order_movement(index,shipment,orders)
+     def update_order_movement(index,shipment,orders)
     {
         BaseShipmentOrderMovement orderMov =new BaseShipmentOrderMovement(shipment.orgid,shipment.shipmentid)
         orderMov.setOrderid(orders[index])

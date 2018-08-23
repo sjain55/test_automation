@@ -54,9 +54,9 @@ class BaseShipmentStop {
         estimateddeparturetime=''
     }
 
-    def buildjson() {
-        def json = new JsonBuilder()
-        def root = json {
+    def buildjson(parent) {
+
+        parent."Stop" {
 
             Orgid this.orgid
             StopSeq this.stopseq
@@ -81,8 +81,6 @@ class BaseShipmentStop {
             EstimatedArrivalTime this.estimatedarrivaltime
             EstimatedDepartureTime this.estimateddeparturetime
         }
-        return json.toPrettyString()
-
     }
 
 

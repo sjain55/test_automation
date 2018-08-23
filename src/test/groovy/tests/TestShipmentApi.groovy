@@ -1,21 +1,19 @@
 package tests
 
-import common_libs.OrderUtils
-import common_libs.ShipmentUtils
-import groovy.json.StreamingJsonBuilder
+import api.OrderAPIUtil
+import api.ShipmentAPIUtil
+import common_libs.CommonUtils
 import org.testng.annotations.Test
-import test_data_models.BaseOrder
-import test_data_models.BaseShipment
-import test_data_models.BaseShipmentOrderMovement
-import test_data_models.BaseShipmentStop
-import api.ShipmentApi
+import jsonTemplate.BaseOrder
+import jsonTemplate.BaseShipment
 
 class TestShipmentApi {
 
     BaseShipment shipment
     BaseOrder order
-    def shipmentUtil = new ShipmentUtils();
-    def orderUtil = new OrderUtils();
+    def shipmentUtil = new ShipmentAPIUtil();
+    def orderUtil = new OrderAPIUtil();
+    def commonUtil = new CommonUtils()
     def minimum_days_from_now  = 2
     def orgId='dummyOrg'
 
@@ -88,13 +86,13 @@ class TestShipmentApi {
             order.setOriginfacilityname(order_origin_facility)
             order.setDestinationfacilityid(order_destination_facility)
             order.setDestinationfacilityname(order_destination_facility)
-            orderUtil.update_order_timestamp(order,minimum_days_from_now)
+            commonUtil.update_order_timestamp(order,minimum_days_from_now)
             order.orderlines=order_line_item.collect{orderUtil.update_order_Lines(order_line_item.indexOf(it),order_line_item,order)}
             orderJson=order.buildjson()
             println("Distribution Order json =" + orderJson)
 
             //Create Order
-            orderUtil.createDistributionOrder(orderJson)
+            //orderUtil.createDistributionOrder(orderJson)
          }
 
         @Test(description= "RESET functionality of shipment json. Reset both stop and Order Movement")
