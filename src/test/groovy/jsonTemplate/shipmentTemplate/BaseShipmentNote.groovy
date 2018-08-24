@@ -1,6 +1,4 @@
-package jsonTemplate
-
-import groovy.json.*
+package jsonTemplate.shipmentTemplate
 
 class BaseShipmentNote {
 

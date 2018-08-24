@@ -4,6 +4,7 @@ tlmqe:
       url: http://scshipment.tlmqe.manhdev.com
       endpoint: /api/scshipment/shipment
       create_endpoint: /api/scshipment/shipment/save
+      party_qualifier: /api/scshipment/partyQualifier
 
     order:
       url: http://dcorder.tlmqe.manhdev.com

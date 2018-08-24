@@ -3,7 +3,7 @@ package api
 import common_libs.CommonUtils
 import connection_factories.RestAssuredUtils
 import db.DbConnectionFactory
-import jsonTemplate.*
+import jsonTemplate.tenderTemplate.BaseTender
 
 
 class TenderApi {

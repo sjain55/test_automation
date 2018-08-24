@@ -3,15 +3,13 @@ package api
 import common_libs.CommonUtils
 import connection_factories.RestAssuredUtils
 import db.DbConnectionFactory
-import jsonTemplate.BaseShipmentOrderMovement
-import jsonTemplate.BaseShipmentStop
-import jsonTemplate.BaseShipmentNote
-import jsonTemplate.BaseTender
+import jsonTemplate.shipmentTemplate.BaseShipmentInvolvedParties
+import jsonTemplate.shipmentTemplate.BaseShipmentOrderMovement
+import jsonTemplate.shipmentTemplate.BaseShipmentStop
+import jsonTemplate.shipmentTemplate.BaseShipmentNote
+import jsonTemplate.tenderTemplate.BaseTender
 
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
-
-class ShipmentAPIUtil {
+class ShipmentApiUtil {
 
     RestAssuredUtils rest
     BaseTender tender
@@ -22,7 +20,7 @@ class ShipmentAPIUtil {
     def shipment_db_config
     DbConnectionFactory db
 
-    ShipmentAPIUtil()
+    ShipmentApiUtil()
     {
         rest = new RestAssuredUtils()
         tender = new BaseTender()
@@ -61,6 +59,14 @@ class ShipmentAPIUtil {
         return shipmentNote
     }
 
+    def update_Involved_parties(shipment,involvedPatyId){
+        BaseShipmentInvolvedParties involvedParties = new BaseShipmentInvolvedParties(shipment.orgid,shipment.shipmentid,shipment.partyqualifierid)
+        involvedParties.setInvolvedpartyid(involvedPatyId)
+        involvedParties.setPartycontactcorp("DummyCorp")
+        involvedParties.setPartycontactlanguage("English")
+        return involvedParties
+    }
+
     def createShipment(msg)
     {
         try {
@@ -69,8 +75,27 @@ class ShipmentAPIUtil {
             shipment_db_config= config.add_mysql_url(shipment_config['db_config']['shipment'])
             URL = shipment_app_config['url']+ shipment_app_config['create_endpoint']
             println ("URL = " +URL)
-            def status = rest.postRequest(URL, msg, "application/json")
-            println("Status =" + status)
+            def response = rest.postRequest(URL, msg, "application/json")
+            println("Status =" + response.getStatusCode())
+            /*if(status.getStatusCode()!=200)
+            {
+                throw  new Exception("Unable to post Request to "+ URL)
+            }*/
+        }catch(Exception e){
+            assert false: "Exception occured ${e.printStackTrace()}"
+        }
+    }
+
+    def createPartyQualifier(msg)
+    {
+        try {
+            shipment_config = config.read_properties()
+            shipment_app_config = shipment_config['app_config']['shipment']
+            shipment_db_config= config.add_mysql_url(shipment_config['db_config']['shipment'])
+            URL = shipment_app_config['url']+ shipment_app_config['party_qualifier']
+            println ("URL = " +URL)
+            def response = rest.postRequest(URL, msg, "application/json")
+            println("Status =" + response.getStatusCode())
             /*if(status.getStatusCode()!=200)
             {
                 throw  new Exception("Unable to post Request to "+ URL)

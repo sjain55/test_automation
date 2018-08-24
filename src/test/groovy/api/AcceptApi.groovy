@@ -2,7 +2,7 @@ package api
 
 import common_libs.CommonUtils
 import connection_factories.RestAssuredUtils
-import jsonTemplate.BaseAccept
+import jsonTemplate.tenderTemplate.BaseAccept
 
 class AcceptApi {
 

@@ -3,13 +3,10 @@ package api
 import common_libs.CommonUtils
 import connection_factories.RestAssuredUtils
 import db.DbConnectionFactory
-import jsonTemplate.BaseOrderLine
-import jsonTemplate.BaseTender
+import jsonTemplate.orderTemplate.BaseOrderLine
+import jsonTemplate.tenderTemplate.BaseTender
 
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
-
-class OrderAPIUtil {
+class OrderApiUtil {
     RestAssuredUtils rest
     BaseTender tender
     String URL
@@ -19,7 +16,7 @@ class OrderAPIUtil {
     def order_db_config
     DbConnectionFactory db
 
-    OrderAPIUtil()
+    OrderApiUtil()
     {
         rest = new RestAssuredUtils()
         db = new DbConnectionFactory()

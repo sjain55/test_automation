@@ -1,4 +1,4 @@
-package jsonTemplate
+package jsonTemplate.tenderTemplate
 
 import groovy.json.*
 

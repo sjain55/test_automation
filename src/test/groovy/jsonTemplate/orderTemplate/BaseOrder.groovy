@@ -1,4 +1,4 @@
-package jsonTemplate
+package jsonTemplate.orderTemplate
 
 import groovy.json.JsonBuilder
 

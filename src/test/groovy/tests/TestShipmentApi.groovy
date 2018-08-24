@@ -1,30 +1,70 @@
 package tests
 
-import api.OrderAPIUtil
-import api.ShipmentAPIUtil
+import api.OrderApiUtil
+import api.ShipmentApiUtil
 import common_libs.CommonUtils
+import jsonTemplate.shipmentTemplate.BaseShipmentPartyQualiffier
 import org.testng.annotations.Test
-import jsonTemplate.BaseOrder
-import jsonTemplate.BaseShipment
+import jsonTemplate.orderTemplate.BaseOrder
+import jsonTemplate.shipmentTemplate.BaseShipment
 
 class TestShipmentApi {
 
     BaseShipment shipment
+    BaseShipmentPartyQualiffier shipmentPartyQualifier
     BaseOrder order
-    def shipmentUtil = new ShipmentAPIUtil();
-    def orderUtil = new OrderAPIUtil();
-    def commonUtil = new CommonUtils()
-    def minimum_days_from_now  = 2
-    def orgId='dummyOrg'
+    def shipmentUtil
+    def orderUtil
+    def commonUtil
+    def minimum_days_from_now
+    def orgId
+    def partyqualifierid
 
 
-    def shipmentJson,shipmentNoteJson,orderJson
+    def shipmentJson,shipmentNoteJson,orderJson, partyQualifierJson
 
     TestShipmentApi()
     {
         shipment = new BaseShipment()
+        shipmentPartyQualifier = new BaseShipmentPartyQualiffier()
         order = new BaseOrder()
+        shipmentUtil = new ShipmentApiUtil()
+        orderUtil = new OrderApiUtil()
+        commonUtil = new CommonUtils()
+        minimum_days_from_now  = 2
+        orgId='dummyOrg'
     }
+
+   @Test
+   public void create2StopShipment() {
+       def shipmentId = 'PAR_SHIPMENT_03'
+       def carrierId = 'PAR_CARRIER_01'
+       def stop_facilities = ['FAC1', 'FAC2']
+       def stop_actions = ['PU', 'DL']
+       def orders=['HAR_ORDER_41','HAR_ORDER_42']
+       def involvedPatyId = '0eb1c47a-fc08-48a1-9340-f441c4ddec'
+       //Create a Party Qualifier
+       partyqualifierid = "Insurance Company"
+/*       shipmentPartyQualifier.setPartyqualifierid(partyqualifierid)
+       shipmentPartyQualifier.setQualifierdescription("Adding Party Qualifier for Automation testing.")
+       partyQualifierJson = shipmentPartyQualifier.buildjson()
+       println("Party Qualifier json = " + partyQualifierJson)
+       shipmentUtil.createPartyQualifier(partyQualifierJson)*/
+
+       //Create Shipment Json
+       shipment.setOrgid(orgId)
+       shipment.setShipmentid(shipmentId)
+       shipment.setAssignedcarrier(carrierId)
+       shipment.setPartyqualifierid(partyqualifierid)
+       shipment.shipmentstops = stop_facilities.collect {
+           shipmentUtil.update_facilities_and_stops_on_tlm_shipment(stop_facilities.indexOf(it), shipment, minimum_days_from_now, stop_facilities, stop_actions)
+       }
+       shipment.shipmentordermovements=orders.collect{shipmentUtil.update_order_movement(orders.indexOf(it),shipment,orders)}
+       shipment.shipmentinvolvedparties=shipmentUtil.update_Involved_parties(shipment,involvedPatyId)
+       shipmentJson = shipment.buildsimplejson()
+       println("Shipment Json with 2 Stops =" + shipmentJson)
+       shipmentUtil.createShipment(shipmentJson)
+   }
 
     @Test(description = "Create a 4 Stop shipment, ensure check in Stop Table")
     public void createShipment()
@@ -71,29 +111,6 @@ class TestShipmentApi {
            shipmentUtil.createShipment(shipmentNoteJson)
            shipmentUtil.assert_for_Shipment_Level_Note(shipmentId,noteType,noteValue,noteCode,noteVisibility)
        }
-
-        @Test(description= "Create an Order")
-        public void createDistributionOrder()
-        {
-            def orderId='HAR_ORDER_01'
-            def order_origin_facility='FAC1'
-            def order_destination_facility='FAC4'
-            def order_line_item=['HAR_ITEM01','HAR_ITEM02']
-
-            //Create Order json
-            order.setOrderid(orderId)
-            order.setOriginfacilityid(order_origin_facility)
-            order.setOriginfacilityname(order_origin_facility)
-            order.setDestinationfacilityid(order_destination_facility)
-            order.setDestinationfacilityname(order_destination_facility)
-            commonUtil.update_order_timestamp(order,minimum_days_from_now)
-            order.orderlines=order_line_item.collect{orderUtil.update_order_Lines(order_line_item.indexOf(it),order_line_item,order)}
-            orderJson=order.buildjson()
-            println("Distribution Order json =" + orderJson)
-
-            //Create Order
-            //orderUtil.createDistributionOrder(orderJson)
-         }
 
         @Test(description= "RESET functionality of shipment json. Reset both stop and Order Movement")
         public void createShipmentWithResetLogic()

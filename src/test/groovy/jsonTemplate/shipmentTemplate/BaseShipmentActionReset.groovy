@@ -1,4 +1,4 @@
-package jsonTemplate
+package jsonTemplate.shipmentTemplate
 
 class BaseShipmentActionReset {
 
