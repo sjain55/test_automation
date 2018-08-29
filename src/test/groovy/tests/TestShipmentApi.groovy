@@ -79,7 +79,7 @@ class TestShipmentApi {
         shipment.setShipmentid(shipmentId)
         shipment.setAssignedcarrier(carrierId)
         shipment.shipmentstops = stop_facilities.collect{shipmentUtil.update_facilities_and_stops_on_tlm_shipment(stop_facilities.indexOf(it) ,shipment,minimum_days_from_now,stop_facilities, stop_actions)}
-        shipmentJson=shipment.buildjson()
+        shipmentJson=shipment.buildsimplejson()
         println("Shipment Json with 4 Stops =" + shipmentJson)
 
         //Hit POST /api/scshipment/shipment/Save API, and validate the Shipment creation in db
