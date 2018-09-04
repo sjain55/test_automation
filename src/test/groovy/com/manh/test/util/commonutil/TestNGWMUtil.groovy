@@ -47,17 +47,17 @@ class TestNGWMUtil {
 // All the common methods will come here
 
     //we should use this constructor always for our setup
-    TestNGWMUtil(String className, String exeType, Logger log) {
+    TestNGWMUtil(String className, Logger log) {
         this.log = log
         baseTest.loadData(className, log)
         wmValidationUtil = new WMValidationUtil("validation_mapping_sheet.xlsx", this, log)
-        initialize("testdata/properties/wm/" + className + ".properties");
-        dcConn = getOracleDBConnections("DCAllocation")
+        //initialize("testdata/properties/" + className + ".properties");
+        /*dcConn = getOracleDBConnections("DCAllocation")
         doConn = getOracleDBConnections("DCOrder")
         wrConn = getOracleDBConnections("WorkRelease")
-        lmConn = getOracleDBConnections("lmCore")
+        lmConn = getOracleDBConnections("lmCore")*/
         // DI
-        deviceIntegrationConn = getOracleDBConnections("DIDatabase")
+        //deviceIntegrationConn = getOracleDBConnections("DIDatabase")
         /*if(EXECUTION_TYPE.MDA.equals(exeType)){
             ta = new TestNGAdapter(baseTest.fetchValue("g_MDA_User_Name"), baseTest.fetchValue("g_MDA_Pwd"), baseTest.fetchValue("g_MDA_URL"))
         }
