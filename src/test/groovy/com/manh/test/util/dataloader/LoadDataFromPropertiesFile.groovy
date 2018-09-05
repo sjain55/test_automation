@@ -9,7 +9,7 @@ class LoadDataFromPropertiesFile extends DataLoader{
 
         super();
         this.dataProvider = dataProvider;
-        initializeProps("testdata/properties/wm/" + dataProvider + ".properties");
+        initializeProps("testdata/properties/" + dataProvider + ".properties");
     }
 
     @Override

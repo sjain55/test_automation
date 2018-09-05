@@ -1,10 +1,13 @@
 package com.manh.test.util.dataloader
 
-class ReplaceDynamicValues {/*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
-    final String START_STRING = "${"
+class ReplaceDynamicValues {
+
+    final String START_STRING = '${'
         final String END_STRING = "}";
-        final String DYNAMIC_REGEX_EXP = "\\$\\{([a-zA-Z_#0-9]{1,})\\}"
+        final String DYNAMIC_REGEX_EXP = /\$\\{([a-zA-Z_#0-9]{1,})\\}/
 
         TreeMap<String, String> map = new TreeMap<String, String>();
 
@@ -59,4 +62,4 @@ class ReplaceDynamicValues {/*
             }
             return list;
         }
-*/}
+}

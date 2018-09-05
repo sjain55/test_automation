@@ -39,7 +39,7 @@ class ExcelRead {
 
         try{
             //fis = new FileInputStream(fileName);
-            fis = this.getClass().getClassLoader().getResourceAsStream("testdata/excel/wm/${fileName}")
+            fis = this.getClass().getClassLoader().getResourceAsStream("testdata/excel/${fileName}")
         } catch(FileNotFoundException e){
             println fileName + " not found... Terminating";
             throw new FileNotFoundException();

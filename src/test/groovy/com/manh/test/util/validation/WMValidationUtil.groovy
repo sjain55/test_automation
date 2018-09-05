@@ -20,7 +20,7 @@ class WMValidationUtil {
 
     //validate method
     //This method will be called by the automation test case to validate a particular transaction.
-    public boolean validateFor(String queryKey, TreeMap whereConditionKeyValuePairs, TreeMap expectedKeyValuePairs){
+    public boolean validateFor(String queryKey, TreeMap whereConditionKeyValuePairs){
         int noOfTimesToRevalidate;
         int validationResultCounter=0;
         int validationResult=0;
@@ -33,7 +33,7 @@ class WMValidationUtil {
         List<TreeMap<String, String>> queryWithDB = this.getQueries(queryKey);
         TreeMap<String, String> validationQueries = queryWithDB.get(0);
         TreeMap<String, String> dbNameMap = queryWithDB.get(1);
-        TreeSet<String> expectedQueryResultKeySet = expectedKeyValuePairs.keySet();
+        //TreeSet<String> expectedQueryResultKeySet = expectedKeyValuePairs.keySet();
 
         TreeSet<String> querySet = validationQueries.keySet();
 
@@ -182,8 +182,7 @@ class WMValidationUtil {
         if(excelRead.masterKeyMap.containsKey(queryKey)){
             for(String eachSubKey : excelRead.masterKeyMap.get(queryKey)){
                 validationQueries.put(excelRead.queryKeyMap.get(eachSubKey.substring(0,eachSubKey.indexOf(":"))), eachSubKey.substring(eachSubKey.indexOf(":")+1));
-
-                subKey = eachSubKey.substring(0,eachSubKey.indexOf(":"));
+                //subKey = eachSubKey.substring(0,eachSubKey.indexOf(":"));
 
                 if( subKey.contains("DCALLOCATION") )
                 {
@@ -235,7 +234,8 @@ class WMValidationUtil {
                 query = query.replace("?"+eachKey+"?", whereConditionKeyValuePairs.get(eachKey));
             }
         }
-        return query;
+        println(query)
+        return query
     }
 
     //check for mandatory columns presence in actual formed query
