@@ -10,7 +10,12 @@ class CommonUtils {
 
     def mysql_url= [:]
     public static envParams = null
-    def env_tag = 'tlmqe'
+    def env_tag = 'tlmdevint'
+
+    def generateAuthorizationToken(){
+        def userName = 'supplychainadmin@1';
+        def password = 'password';
+    }
 
 
     def read_properties()
@@ -42,6 +47,8 @@ class CommonUtils {
             return (db_config + mysql_url)
         }
     }
+
+
 
     def update_order_timestamp(order,minimum_days_from_now)
     {
