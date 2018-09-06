@@ -1,23 +1,24 @@
 package jsonTemplate.tenderTemplate
 
-import groovy.json.*
+
+import groovy.json.JsonBuilder
+
+class BaseTenderConfig {
+
+    def tenderautoaccept
 
 
-class BaseTender {
-
-
-    def shipmentid
-
-    BaseTender()
+    BaseTenderConfig()
     {
-        shipmentid = '1234'
+        tenderautoaccept = 'false'
+
     }
 
     def buildjson()
     {
         def json = new JsonBuilder()
         def root = json {
-            ShipmentId this.shipmentid }
+            TenderAutoAccept this.tenderautoaccept}
 
         return json.toPrettyString()
     }

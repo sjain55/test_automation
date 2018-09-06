@@ -1,16 +1,17 @@
 package jsonTemplate.tenderTemplate
 
-import groovy.json.*
 
-class BaseAccept {
+import groovy.json.JsonBuilder
+
+class BaseReset {
 
     def shipmentid
-    def carrierid
+    def reasoncode
 
-    BaseAccept()
+    BaseReset()
     {
-        shipmentid = '1234'
-        carrierid = 'CARR1'
+        shipmentid = ''
+        reasoncode = ''
     }
 
     def buildjson()
@@ -18,7 +19,7 @@ class BaseAccept {
         def json = new JsonBuilder()
         def root = json {
             ShipmentId this.shipmentid
-            CarrierId this.carrierid }
+            ReasonCode this.reasoncode }
 
         return json.toPrettyString()
     }

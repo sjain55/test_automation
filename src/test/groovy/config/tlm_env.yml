@@ -1,34 +1,105 @@
-tlmqe:
+tlmdevint:
   app_config:
     shipment:
-      url: http://scshipment.tlmqe.manhdev.com
+      url: https://scshipment.sc2020devint.manhdev.com
       endpoint: /api/scshipment/shipment
       create_endpoint: /api/scshipment/shipment/save
       party_qualifier: /api/scshipment/partyQualifier
 
     order:
-      url: http://dcorder.tlmqe.manhdev.com
+      url: https://dcorder.sc2020devint.manhdev.com
       endpoint: /api/dcorder/order
       create_endpoint: /api/dcorder/order/import
 
     tender:
-      url: http://tender.tlmqe.manhdev.com
+      url: https://tender.sc2020devint.manhdev.com
       endpoint: /api/tender/tender
+      acceptendpoint: /api/tender/acceptTender
+      rejectendpoint: /api/tender/rejectTender
+      resetendpoint: /api/tender/resetTender
+      recallendpoint: /api/tender/recallTender
+      configendpoint: /api/tender/writeConfig
 
     tracking:
-      url: http://tracking.tlmqe.manhdev.com
+      url: https://tracking.sc2020devint.manhdev.com
       endpoint: /api/tracking/tracking
 
-    accept:
-      url: http://tender.tlmqe.manhdev.com
-      endpoint: /api/tender/acceptTender
-
     invoice:
-      url: http://invoice.tlmqe.manhdev.com
+      url: https://invoice.tlmqe.manhdev.com
       endpoint: /api/invoice/invoice
 
   db_config:
     default: &db_default
+      host: 10.50.72.139
+      port: 10195
+      adapter: mysql
+      username: 'manhmysql'
+      password: 'manhmysql'
+      driver: 'com.mysql.cj.jdbc.Driver'
+      properties:
+        useSSL: false
+        requireSSL: false
+
+    shipment:
+      <<: *db_default
+      service: tlmb_scshipment
+
+    tender:
+      <<: *db_default
+      service: tlmb_tender
+
+    tracking:
+      <<: *db_default
+      service: tlmb_tracking
+
+    order:
+      <<: *db_default
+      service: tlmb_dcorder
+
+    accept:
+      <<: *db_default
+      service: tlmb_tender
+
+    invoice:
+      <<: *db_default
+      service: tlmb_invoice
+
+tlmautomationqe:
+  app_config:
+    shipment:
+      url: https://scshipment.tlmqe.manhdev.com
+      endpoint: /api/scshipment/shipment
+      create_endpoint: /api/scshipment/shipment/save
+      party_qualifier: /api/scshipment/partyQualifier
+
+    order:
+      url: https://dcorder.tlmqe.manhdev.com
+      endpoint: /api/dcorder/order
+      create_endpoint: /api/dcorder/order/import
+
+    tender:
+      url: https://tender.tlmqe.manhdev.com
+      endpoint: /api/tender/tender
+      acceptendpoint: /api/tender/acceptTender
+      rejectendpoint: /api/tender/rejectTender
+      resetendpoint: /api/tender/resetTender
+      recallendpoint: /api/tender/recallTender
+      configendpoint: /api/tender/writeConfig
+
+    tracking:
+      url: https://tracking.tlmqe.manhdev.com
+      endpoint: /api/tracking/tracking
+
+    accept:
+      url: https://tender.tlmqe.manhdev.com
+      endpoint: /api/tender/acceptTender
+
+    invoice:
+      url: https://invoice.tlmqe.manhdev.com
+      endpoint: /api/invoice/invoice
+
+  db_config:
+    default: &db_default1
       host: 10.50.75.107
       port: 10795
       adapter: mysql
@@ -40,27 +111,25 @@ tlmqe:
         requireSSL: false
 
     shipment:
-      <<: *db_default
+      <<: *db_default1
       service: scshipment
 
     tender:
-      <<: *db_default
+      <<: *db_default1
       service: tender
 
     tracking:
-      <<: *db_default
+      <<: *db_default1
       service: tracking
 
     order:
-      <<: *db_default
+      <<: *db_default1
       service: dcorder
 
     accept:
-      <<: *db_default
+      <<: *db_default1
       service: tender
 
     invoice:
-      <<: *db_default
+      <<: *db_default1
       service: invoice
-
-
