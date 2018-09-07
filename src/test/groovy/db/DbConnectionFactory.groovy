@@ -38,26 +38,22 @@ class DbConnectionFactory {
         }
     }
 
-    def acceptDbProperties()
-    {
-        def dbProperties = Sql.newInstance(add_mysql_url(envParams['db_config']['accept']),envDbParams['default']['username'],envDbParams['default']['password'],envDbParams['default']['driver'])
+    Sql acceptDbProperties() {
+        def dbProperties = Sql.newInstance(add_mysql_url(envParams['db_config']['accept']), envDbParams['default']['username'], envDbParams['default']['password'], envDbParams['default']['driver'])
         return dbProperties
     }
 
-    def tenderDbProperties()
-    {
-        def dbProperties = Sql.newInstance(add_mysql_url(envParams['db_config']['tender']),envDbParams['default']['username'],envDbParams['default']['password'],envDbParams['default']['driver'])
+    Sql tenderDbProperties() {
+        def dbProperties = Sql.newInstance(add_mysql_url(envParams['db_config']['tender']), envDbParams['default']['username'], envDbParams['default']['password'], envDbParams['default']['driver'])
         return dbProperties
     }
 
-    def shipmentDbProperties()
-    {
-        def dbProperties = Sql.newInstance(add_mysql_url(envParams['db_config']['shipment']),envDbParams['default']['username'],envDbParams['default']['password'],envDbParams['default']['driver'])
+    Sql shipmentDbProperties() {
+        def dbProperties = Sql.newInstance(add_mysql_url(envParams['db_config']['shipment']), envDbParams['default']['username'], envDbParams['default']['password'], envDbParams['default']['driver'])
         return dbProperties
     }
 
-    public void closeConnetion(Sql sql)
-    {
+    public void closeConnetion(Sql sql) {
         sql.close();
     }
 

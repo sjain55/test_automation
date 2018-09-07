@@ -7,8 +7,7 @@ import java.util.logging.*
 public class TestLogger {
 
 
-    public static Logger getLogger(String _className)
-    {
+    public static Logger getLogger(String _className) {
         FileHandler handler = null;
         ConsoleHandler console_handler = new ConsoleHandler();
         Date date = new Date();
@@ -18,7 +17,7 @@ public class TestLogger {
             java.util.Date now = new Date();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String timer = format.format(now).replace("-", "_");
-            handler = new FileHandler(_className+"_"+timer+".log", true);
+            handler = new FileHandler(_className + "_" + timer + ".log", true);
             handler.setFormatter(formatter);
             console_handler.setFormatter(formatter);
         } catch (Exception e) {
@@ -57,7 +56,6 @@ public class SingleLineFormatter extends Formatter {
         dat.setTime(record.getMillis());
         args[0] = dat;
 
-
         // Date and time
         StringBuffer text = new StringBuffer();
         if (formatter == null) {
@@ -66,7 +64,6 @@ public class SingleLineFormatter extends Formatter {
         formatter.format(args, text, null);
         sb.append(text);
         sb.append(" ");
-
 
         // Class name
         if (record.getSourceClassName() != null) {
@@ -83,7 +80,6 @@ public class SingleLineFormatter extends Formatter {
         sb.append(" - "); // lineSeparator
 
 
-
         String message = formatMessage(record);
 
         // Level
@@ -92,7 +88,7 @@ public class SingleLineFormatter extends Formatter {
 
         // Indent - the more serious, the more indented.
         int iOffset = (1000 - record.getLevel().intValue()) / 100;
-        for( int i = 0; i < iOffset;  i++ ){
+        for (int i = 0; i < iOffset; i++) {
             sb.append(" ");
         }
 
