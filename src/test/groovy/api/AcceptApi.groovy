@@ -20,7 +20,7 @@ class AcceptApi {
         accept = new BaseAccept()
     }
 
-    def send(msg)
+    def acceptTender(msg)
     {
         try {
             accept_config = config.read_properties()
@@ -33,8 +33,7 @@ class AcceptApi {
                 throw  new Exception("Unable to post Request to "+ URL)
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             assert false:"Exception occured ${e.printStackTrace()}"
         }
 

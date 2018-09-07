@@ -1,5 +1,6 @@
 package api
 
+import com.jayway.restassured.response.Response
 import common_libs.CommonUtils
 import connection_factories.RestAssuredUtils
 import db.DbConnectionFactory
@@ -24,7 +25,7 @@ class TenderApi {
         db = new DbConnectionFactory()
     }
 
-    def send(msg)
+    def createTender(msg)
     {
         try {
             tender_config = config.read_properties()
@@ -32,19 +33,19 @@ class TenderApi {
             tender_db_config= config.add_mysql_url(tender_config['db_config']['tender'])
             URL = tender_app_config['url']+ tender_app_config['endpoint']
             println ("URL = " +URL)
-            def status = rest.postRequest(URL, msg, "application/json")
+            Response status = rest.postRequest(URL, msg, "application/json")
             println("Status =" + status)
-            /*if(status.getStatusCode()!=200)
-            {
+            if(status.getStatusCode()!=200) {
                 throw  new Exception("Unable to post Request to "+ URL)
-            }*/
+            }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             assert false:"Exception occured ${e.printStackTrace()}"
         }
 
     }
+
+
 
     def assert_for_Tender_Status(status,shipmentid)
     {
@@ -52,6 +53,7 @@ class TenderApi {
         def result = sql.rows("select * from SCS_SHIPMENT where SHIPMENT_ID =${shipmentid} limit 1")
         assert result.TENDER_STATUS == [status]
     }
+
 
 }
 

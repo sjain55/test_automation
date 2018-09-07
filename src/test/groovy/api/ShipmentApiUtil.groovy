@@ -1,8 +1,16 @@
 package api
 
+import com.jayway.restassured.response.Response
 import common_libs.CommonUtils
 import connection_factories.RestAssuredUtils
 import db.DbConnectionFactory
+import jsonTemplate.BaseAccept
+import jsonTemplate.BaseShipment
+import jsonTemplate.BaseShipmentOrderMovement
+import jsonTemplate.BaseShipmentStop
+import jsonTemplate.BaseShipmentNote
+import jsonTemplate.BaseTender
+=======
 import jsonTemplate.shipmentTemplate.BaseShipmentInvolvedParties
 import jsonTemplate.shipmentTemplate.BaseShipmentOrderMovement
 import jsonTemplate.shipmentTemplate.BaseShipmentStop
@@ -19,12 +27,21 @@ class ShipmentApiUtil {
     def shipment_config
     def shipment_db_config
     DbConnectionFactory db
+    def minimum_days_from_now  = 2
+    BaseShipment shipment
+    TenderApi tenderUtil
+    BaseAccept acceptTender
+    AcceptApi accept
 
     ShipmentApiUtil()
     {
         rest = new RestAssuredUtils()
         tender = new BaseTender()
         db = new DbConnectionFactory()
+        shipment=new BaseShipment()
+        tenderUtil = new TenderApi()
+        acceptTender = new BaseAccept()
+        accept = new AcceptApi()
     }
 
     def update_facilities_and_stops_on_tlm_shipment(index, shipment, minimum_days_from_now, stop_facilities, stop_actions )
@@ -69,12 +86,16 @@ class ShipmentApiUtil {
 
     def createShipment(msg)
     {
+        Response response
         try {
             shipment_config = config.read_properties()
             shipment_app_config = shipment_config['app_config']['shipment']
             shipment_db_config= config.add_mysql_url(shipment_config['db_config']['shipment'])
             URL = shipment_app_config['url']+ shipment_app_config['create_endpoint']
             println ("URL = " +URL)
+            response = rest.postRequest(URL, msg, "application/json")
+            println("Status =" + response.getStatusCode())
+            if(response.getStatusCode()!=200) {
             def response = rest.postRequest(URL, msg, "application/json")
             println("Status =" + response.getStatusCode())
             /*if(status.getStatusCode()!=200)
@@ -99,17 +120,20 @@ class ShipmentApiUtil {
             /*if(status.getStatusCode()!=200)
             {
                 throw  new Exception("Unable to post Request to "+ URL)
-            }*/
+            }
         }catch(Exception e){
             assert false: "Exception occured ${e.printStackTrace()}"
         }
+        return response.getBody().jsonPath().get("data.ShipmentId")
     }
 
     def assert_for_Shipment_Stop(shipmentId,carrierId,stop_facilities,stop_actions)
     {
         def sql = db.shipmentDbProperties()
+        println "SQL instacne:"+sql
         //validate shipment created in SCS_SHIPMENT table <shipmentid, carrierid
-        def shipmentResult = sql.rows("select SHIPMENT_ID, ASSIGNED_CARRIER from SCS_SHIPMENT WHERE SHIPMENT_ID = ${shipmentId}")
+        def shipmentResult = sql.rows("select SHIPMENT_ID, ASSIGNED_CARRIER from SCS_SHIPMENT WHERE SHIPMENT_ID = ${shipmentId} limit 1")
+        println "this is sql"+shipmentResult
         assert shipmentResult.SHIPMENT_ID == [shipmentId]
         assert shipmentResult.ASSIGNED_CARRIER == [carrierId]
 
@@ -165,4 +189,38 @@ class ShipmentApiUtil {
             assert expectedNoteVisibility[i] == noteVisibility[i]
         }
     }
+
+
+    def createShipmentWithStopsAndStopActions(def stops,def stopActons,def orders,def util) {
+        //Create Shipment Json
+        shipment.setOrgid(util.orgId)
+        shipment.setShipmentid(CommonUtils.getUniqueIdFor("Auto_Ship"))
+        shipment.setAssignedcarrier(util.carrierId)
+        shipment.shipmentstops = stops.collect {
+            this.update_facilities_and_stops_on_tlm_shipment(stops.indexOf(it), shipment, minimum_days_from_now, stops, stopActons)
+        }
+        shipment.shipmentordermovements = orders.collect { update_order_movement(orders.indexOf(it), shipment, orders) }
+        def shipmentJson = shipment.buildShipmentjsonOrderMovement()
+        println("Shipment Json with 4 Stops =" + shipmentJson)
+
+        //Hit POST /api/scshipment/shipment/Save API, and validate the Shipment creation in db
+        def id = createShipment(shipmentJson)
+        assert_for_Shipment_Stop(id, util.carrierId, stops, stopActons)
+        return id
+    }
+
+
+        def createShipmentAndAcceptTender(){
+            def id
+            def stoplist = ['FAC1', 'FAC2']
+            def stopAction = ['PU', 'DL']
+            def order = ['Order1']
+            id = createShipmentWithStopsAndStopActions(stoplist, stopAction, order, shipment)
+            tender.setShipmentid(id)
+            tenderUtil.createTender(tender.buildjson())
+            acceptTender.setShipmentid(id)
+            acceptTender.setCarrierid(shipment.assignedcarrier)
+            accept.acceptTender(acceptTender.buildjson())
+            return id
+        }
 }

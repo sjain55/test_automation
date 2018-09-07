@@ -1,5 +1,7 @@
 package common_libs
 
+import com.jayway.restassured.response.Response
+import org.testng.Reporter
 import org.yaml.snakeyaml.Yaml
 
 import java.sql.Timestamp
@@ -48,8 +50,6 @@ class CommonUtils {
         }
     }
 
-
-
     def update_order_timestamp(order,minimum_days_from_now)
     {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -76,8 +76,44 @@ class CommonUtils {
 
     def timeStampformatter(Timestamp timestamp)
     {
-        String  simpleDateFormat  = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss",Locale.US).format(timestamp);
+        String  simpleDateFormat  = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss",Locale.US).format(timestamp)
         return simpleDateFormat
 
+    }
+
+    /**
+     * This function generates unique string for a given string
+    * @author : Samjain
+     */
+    static def getUniqueIdFor(String objId=""){
+        return "${objId ? objId+'_' : ''}${System.currentTimeMillis()}"
+    }
+
+    /**
+     * Get four digit random number
+     */
+    static def getFourDigitRandomNumber(){
+        def random =  Math.abs(new Random().nextInt() % 1000 + 1)
+        return random
+    }
+
+    /**
+     * DataFormatter
+     */
+    def static formatDate(Date date){
+        return new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss",Locale.US).format(date)
+    }
+
+    /**
+     * validate if response contains exception
+     */
+     static def getExceptionFromResponse(Response response){
+        def list = response.getBody().jsonPath().getList("exceptions.stackTrace")
+        boolean isException
+        println "/n stacktrace is : ${list.get(0)}"
+        if(list.size()>0){
+            isException = true
+        }
+        return isException
     }
 }

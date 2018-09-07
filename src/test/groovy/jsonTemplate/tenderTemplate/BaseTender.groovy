@@ -17,10 +17,10 @@ class BaseTender {
     {
         def json = new JsonBuilder()
         def root = json {
-            ShipmentId this.shipmentid }
+            ShipmentId this.shipmentid
+        }
 
         return json.toPrettyString()
     }
 
 }
-
