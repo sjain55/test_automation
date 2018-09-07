@@ -1,7 +1,6 @@
 package tests
 
 import api.AcceptApi
-
 import api.ShipmentApiUtil
 import api.TenderApi
 import api.TrackingAPIUtil
